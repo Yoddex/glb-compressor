@@ -1,15 +1,61 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>GLB Compressor</title>
+  <meta charset="UTF-8" />
+  <title>GLB Compressor</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2rem;
+      background: #f0f0f0;
+    }
+    input, button {
+      margin: 1rem;
+      padding: 1rem;
+    }
+  </style>
 </head>
 <body>
-    <h1>Upload a GLB file to compress</h1>
-    <form id="uploadForm" enctype="multipart/form-data" method="post" action="/compress">
-        <input type="file" name="model" accept=".glb" required />
-        <button type="submit">Compress</button>
-    </form>
+  <h1>GLB Compressor</h1>
+  <input type="file" id="upload" name="upload" accept=".glb" />
+  <br />
+  <button onclick="compress()">Compress</button>
+
+  <p id="status"></p>
+
+  <script>
+    async function compress() {
+      const fileInput = document.getElementById('upload');
+      const file = fileInput.files[0];
+      if (!file) return alert("Please choose a GLB file first.");
+
+      const formData = new FormData();
+      formData.append('upload', file);
+
+      document.getElementById("status").textContent = "Compressing...";
+
+      try {
+        const response = await fetch('/compress', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) throw new Error("Compression failed");
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'compressed.glb';
+        link.click();
+
+        document.getElementById("status").textContent = "Download started!";
+      } catch (err) {
+        document.getElementById("status").textContent = "Compression failed 😢";
+        console.error(err);
+      }
+    }
+  </script>
 </body>
 </html>
