@@ -16,7 +16,7 @@ app.post("/compress", upload.single("upload"), async (req, res) => {
         const inputPath = req.file.path;
         const outputPath = `compressed/${req.file.originalname}`;
 
-        const io = new NodeIO(); // Fixed here
+        const io = new NodeIO(); // ✅ Fixed: No registerExtensions
 
         const doc = io.read(inputPath);
         await doc.transform(dracoCompress());
