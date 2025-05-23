@@ -6,10 +6,9 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "@gltf-transform/core": "^3.14.0",
-    "@gltf-transform/functions": "^3.14.0",
+    "@gltf-transform/core": "^3.12.1",
+    "@gltf-transform/functions": "^3.12.1",
     "express": "^4.18.2",
-    "fs": "0.0.1-security",
     "multer": "^1.4.5-lts.1"
   }
 }
