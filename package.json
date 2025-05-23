@@ -1,16 +1,15 @@
 {
   "name": "glb-compressor",
   "version": "1.0.0",
-  "description": "A simple GLB compression server",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "@gltf-transform/core": "^3.9.1",
-    "@gltf-transform/extensions": "^3.9.1",
-    "@gltf-transform/functions": "^3.9.1",
+    "@gltf-transform/core": "^3.14.0",
+    "@gltf-transform/functions": "^3.14.0",
     "express": "^4.18.2",
-    "multer": "^1.4.4"
+    "fs": "0.0.1-security",
+    "multer": "^1.4.5-lts.1"
   }
 }
