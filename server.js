@@ -8,31 +8,33 @@ const { draco } = require('@gltf-transform/functions');
 const app = express();
 const port = process.env.PORT || 10000;
 
-// Serve the frontend
+// Serve static frontend files
 app.use(express.static('public'));
 
-// Set up Multer to store uploaded files temporarily
+// Multer config to handle file upload
 const upload = multer({ dest: 'uploads/' });
 
-// Handle file uploads and compression
+// POST route for GLB compression
 app.post('/compress', upload.single('upload'), async (req, res) => {
   try {
     const inputPath = req.file.path;
     const outputPath = `${inputPath}-compressed.glb`;
 
-    const io = new NodeIO().registerExtensions([draco()]);
+    // Create IO and register extensions separately
+    const io = new NodeIO();
+    io.registerExtensions([draco()]);
 
+    // Read, compress, and write the GLB file
     const doc = io.readBinary(fs.readFileSync(inputPath));
     await doc.transform(draco());
 
     io.writeBinary(doc, outputPath);
 
-    // Send back the compressed file
+    // Download result and cleanup temp files
     res.download(outputPath, 'compressed.glb', (err) => {
       fs.unlinkSync(inputPath);
       fs.unlinkSync(outputPath);
     });
-
   } catch (err) {
     console.error('Compression error:', err);
     res.status(500).send('Compression failed.');
