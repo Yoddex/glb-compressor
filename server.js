@@ -11,7 +11,7 @@ const upload = multer({ dest: 'uploads/' });
 
 app.use(express.static('public'));
 
-app.post('/compress', upload.single('file'), async (req, res) => {
+app.post('/compress', upload.single('upload'), async (req, res) => {
   try {
     const filePath = req.file.path;
     const io = new NodeIO().registerExtensions(EXTENSIONS);
