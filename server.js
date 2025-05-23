@@ -12,14 +12,14 @@ app.use(express.static('public'));
 
 app.post('/compress', upload.single('upload'), async (req, res) => {
   try {
-    console.log("File received:", req.file.originalname);
     const inputPath = req.file.path;
     const outputPath = path.join('uploads', 'compressed.glb');
 
     const io = new NodeIO();
     const doc = io.read(inputPath);
 
-    await doc.transform(draco());
+    // ✅ Correct for GLTF-Transform v4+
+    await draco(doc);
 
     io.write(outputPath, doc);
 
@@ -29,7 +29,7 @@ app.post('/compress', upload.single('upload'), async (req, res) => {
     });
   } catch (e) {
     console.error("Compression error:", e);
-    res.status(500).send("Compression failed.");
+    res.status(500).send("Compression failed: " + e.message);
   }
 });
 
